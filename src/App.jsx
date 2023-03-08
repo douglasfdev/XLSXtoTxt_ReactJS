@@ -33,8 +33,15 @@ export default function App() {
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       const columnData = utils.sheet_to_json(worksheet, {
         header: 1,
+        range: 1,
       });
-      const csvData = columnData.map(row => `${row[1]}`).join('\n');
+      const csvData = columnData
+      .map(row => {
+          const print = `python 2_register_rides.py --os=${row[1]}`
+          if (row.length > 0) return print;
+          return null;
+        })
+        .join('\n');
       const blob = new Blob([csvData], { type: 'text/plain;charset=utf-8' });
       FileSaver.saveAs(blob, 'export.txt');
     };
